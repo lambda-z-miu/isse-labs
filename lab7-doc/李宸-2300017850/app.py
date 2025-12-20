@@ -28,7 +28,7 @@ def hello():
     # 4. Summary: 记录处理时间
     hello_summary.observe(process_time)
     
-    return f"Hello World! (Value: {random_val}, Time: {process_time:.4f}s)"
+    return "Hello World!"
 
 # 暴露 Prometheus 指标
 app.add_url_rule("/metrics", "metrics", metrics)
