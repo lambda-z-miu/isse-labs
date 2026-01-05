@@ -7,8 +7,11 @@ API_KEY.env
 .vscode
 
 # history
-
-
+lab2-doc/
+lab3-doc/
+lab4-doc/
+lab5-doc/
+lab6-doc/
 # ignore __pycache__ folders
 **/__pycache__/
 
