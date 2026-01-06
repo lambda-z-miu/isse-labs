@@ -1,0 +1,25 @@
+services:
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+
+  node-exporter:
+    image: prom/node-exporter
+    container_name: node-exporter
+    ports:
+      - "9100:9100"
+    # 在 Windows 上，node-exporter 无法挂载主机根目录
+    # 移除挂载配置，让容器能正常启动
+    # 注意：在 Windows Docker Desktop 中，node-exporter 只能监控容器内的指标

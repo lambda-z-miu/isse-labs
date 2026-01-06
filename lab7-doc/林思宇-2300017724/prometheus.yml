@@ -1,0 +1,8 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: 'flask-app'
+    static_configs:
+      # Flask 默认运行在宿主机；Prometheus 容器通过 host.docker.internal 访问宿主机端口
+      - targets: ['host.docker.internal:8000']

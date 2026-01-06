@@ -1,0 +1,44 @@
+services:
+  flask-app:
+    build: .
+    container_name: flask-app
+    ports:
+      - "8000:8000"
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+
+  node-exporter:
+    image: prom/node-exporter
+    container_name: node-exporter
+    ports:
+      - "9100:9100"
+    command:
+      - "--path.rootfs=/host"
+    volumes:
+      # WSL2 + Docker Desktop doesn't support mount propagation flags like rslave/rshared.
+      - "/:/host:ro"
+
+  loadgen:
+    image: curlimages/curl:8.12.1
+    container_name: loadgen
+    depends_on:
+      - flask-app
+    command: ["sh", "-c", "while true; do curl -fsS http://flask-app:8000/hello >/dev/null; sleep 0.2; done"]
+    profiles: ["loadgen"]
